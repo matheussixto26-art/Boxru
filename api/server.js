@@ -9,8 +9,8 @@ const chrome = require('chrome-aws-lambda');
 // !!! NUNCA ENVIE ISSO PARA UM REPOSITÓRIO PÚBLICO NO GITHUB !!!
 const CREDENCIAIS = {
     instagram: {
-        usuario: 'SEU_USUARIO_INSTAGRAM_DE_TESTE', // !!! TROQUE AQUI
-        senha: 'SUA_SENHA_INSTAGRAM_DE_TESTE'      // !!! TROQUE AQUI
+        usuario: 'S1xtoo_lk', // !!! TROQUE AQUI
+        senha: 'Ru20121209@'      // !!! TROQUE AQUI
     }
     // Adicione outras credenciais se precisar
 };
