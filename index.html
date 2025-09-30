@@ -1,102 +1,209 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navegador IA</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; color: #1c1e21; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        h1 { color: #007bff; text-align: center; margin-bottom: 10px; }
-        p { text-align: center; color: #606770; margin-bottom: 25px; }
-        .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
-        input[type="text"] { flex-grow: 1; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; }
-        button { padding: 12px 20px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; transition: background-color 0.2s; }
-        button:hover { background-color: #0056b3; }
-        #loader { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
-        .hidden { display: none; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .result-item { border-bottom: 1px solid #eee; padding: 15px 0; }
-        .result-item:last-child { border-bottom: none; }
-        .result-item h3 { margin: 0 0 5px 0; font-size: 18px; }
-        .result-item a { text-decoration: none; color: #1a0dab; }
-        .result-item a:hover { text-decoration: underline; }
-        .result-item p { margin: 5px 0 0 0; color: #4d5156; text-align: left; }
-        #status { text-align: center; margin-top: 15px; font-weight: bold; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Navegador IA Inteligente</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --card-bg: #f9f9f9;
+      --input-bg: #f1f1f1;
+      --border: #ddd;
+      --accent: #4285f4;
+    }
+
+    [data-theme="dark"] {
+      --bg: #121212;
+      --text: #e0e0e0;
+      --card-bg: #1e1e1e;
+      --input-bg: #2d2d2d;
+      --border: #333;
+      --accent: #8ab4f8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background-color 0.3s, color 0.3s;
+      padding: 0;
+      margin: 0;
+    }
+
+    header {
+      padding: 20px;
+      background-color: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+    }
+
+    button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: opacity 0.2s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .section-title {
+      margin: 25px 0 15px;
+      font-size: 22px;
+      color: var(--accent);
+    }
+
+    .news-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .news-card {
+      background: var(--card-bg);
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .news-card a {
+      text-decoration: none;
+      color: var(--accent);
+      font-size: 18px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .news-card p {
+      color: var(--text);
+      opacity: 0.9;
+      font-size: 15px;
+    }
+
+    .news-meta {
+      font-size: 13px;
+      opacity: 0.7;
+      margin-top: 8px;
+    }
+
+    /* Estilo do Google CSE */
+    .gcse-search {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .gcse-searchresults-only {
+      margin-top: 30px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Navegador com IA</h1>
-        <p>A IA irá buscar na web ou fazer login nos sites para você.</p>
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="O que você quer encontrar?">
-            <button id="searchButton">Pesquisar</button>
-        </div>
-        <div class="search-box">
-             <input type="text" id="siteInput" placeholder="Ex: instagram">
-            <button id="loginButton">Fazer Login</button>
-        </div>
-        <div id="loader" class="hidden"></div>
-        <div id="status"></div>
-        <div id="results"></div>
+  <header>
+    <div class="logo">🧠 Navegador IA</div>
+    <div class="controls">
+      <button id="fetchNewsBtn">📰 Carregar Notícias</button>
+      <button id="themeToggle">🌓 Tema</button>
     </div>
-    <script>
-        // !!! MUDANÇA IMPORTANTE AQUI !!!
-        // Não usamos mais uma URL completa. Usamos um caminho relativo.
-        // O próprio site vai saber onde encontrar a sua API.
-        const API_BASE_URL = '/api';
+  </header>
 
-        const searchInput = document.getElementById('searchInput');
-        const searchButton = document.getElementById('searchButton');
-        const siteInput = document.getElementById('siteInput');
-        const loginButton = document.getElementById('loginButton');
-        const resultsDiv = document.getElementById('results');
-        const statusDiv = document.getElementById('status');
-        const loader = document.getElementById('loader');
+  <main>
+    <h2 class="section-title">🔍 Pesquisa na Web</h2>
+    <!-- Google Custom Search Engine -->
+    <div class="gcse-search"></div>
 
-        searchButton.addEventListener('click', async () => {
-            const query = searchInput.value;
-            if (!query) return;
-            showLoader(true);
-            try {
-                // !!! MUDANÇA IMPORTANTE AQUI !!!
-                const response = await fetch(`${API_BASE_URL}/pesquisar?query=${encodeURIComponent(query)}`);
-                if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
-                const data = await response.json();
-                displayResults(data.resultados);
-            } catch (error) {
-                showError(error.message);
-            } finally {
-                showLoader(false);
-            }
-        });
+    <h2 class="section-title">🗞️ Notícias em Tempo Real</h2>
+    <div id="newsContainer" class="news-grid">
+      <p>Clique em "Carregar Notícias" para ver as últimas atualizações.</p>
+    </div>
+  </main>
 
-        loginButton.addEventListener('click', async () => {
-            const site = siteInput.value.trim().toLowerCase();
-            if (!site) return;
-            showLoader(true);
-            try {
-                // !!! MUDANÇA IMPORTANTE AQUI !!!
-                const response = await fetch(`${API_BASE_URL}/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ site: site })
-                });
-                if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
-                const data = await response.json();
-                statusDiv.style.color = data.success ? 'green' : 'red';
-                statusDiv.textContent = data.message;
-            } catch (error) {
-                showError(error.message);
-            } finally {
-                showLoader(false);
-            }
-        });
+  <!-- Google CSE Script -->
+  <script async src="https://cse.google.com/cse.js?cx=65e41a56f6b1f4e5c"></script>
 
-        function showLoader(isLoading) { /* ... (funções auxiliares iguais) ... */ resultsDiv.innerHTML = ''; statusDiv.innerHTML = ''; loader.classList.toggle('hidden', !isLoading); }
-        function showError(message) { /* ... */ resultsDiv.innerHTML = `<p style="color: red;">Falha: ${message}</p>`; }
-        function displayResults(resultados) { /* ... */ if (!resultados || resultados.length === 0) { resultsDiv.innerHTML = '<p>Nenhum resultado encontrado.</p>'; return; } const html = resultados.map(item => `<div class="result-item"><h3><a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.titulo}</a></h3><p>${item.snippet || ''}</p><small style="color: green;">${item.link}</small></div>`).join(''); resultsDiv.innerHTML = html; }
-    </script>
+  <script>
+    // Tema claro/escuro
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      const current = document.body.getAttribute('data-theme');
+      document.body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    });
+
+    // Carregar notícias
+    const fetchNewsBtn = document.getElementById('fetchNewsBtn');
+    const newsContainer = document.getElementById('newsContainer');
+
+    fetchNewsBtn.addEventListener('click', async () => {
+      newsContainer.innerHTML = '<p>Carregando notícias...</p>';
+      
+      try {
+        const query = 'tecnologia OR inteligência artificial OR ciência'; // pode personalizar
+        const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&sortBy=publishedAt&apiKey=4efba2587151428a88fecce2a44ab5b7&pageSize=5`;
+        
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.articles && data.articles.length > 0) {
+          newsContainer.innerHTML = '';
+          data.articles.forEach(article => {
+            if (!article.title || article.title === '[Removed]') return;
+            
+            const card = document.createElement('div');
+            card.className = 'news-card';
+            const pubDate = new Date(article.publishedAt).toLocaleDateString('pt-BR');
+            
+            card.innerHTML = `
+              <a href="${article.url}" target="_blank" rel="noopener">${article.title}</a>
+              <p>${article.description || ''}</p>
+              <div class="news-meta">Fonte: ${article.source.name} • ${pubDate}</div>
+            `;
+            newsContainer.appendChild(card);
+          });
+        } else {
+          newsContainer.innerHTML = '<p>Nenhuma notícia encontrada no momento.</p>';
+        }
+      } catch (error) {
+        console.error('Erro ao carregar notícias:', error);
+        newsContainer.innerHTML = '<p>❌ Erro ao carregar notícias. Verifique sua conexão.</p>';
+      }
+    });
+
+    // Carregar notícias automaticamente ao abrir (opcional)
+    // window.addEventListener('load', () => fetchNewsBtn.click());
+  </script>
 </body>
 </html>
